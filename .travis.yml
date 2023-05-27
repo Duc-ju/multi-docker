@@ -1,0 +1,18 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t duc56/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true duc56/react-test npm run test
+
+after_success:
+  - docker build -t duc56/multi-client ./client
+  - docker build -t duc56/multi-nginx ./nginx
+  - docker build -t duc56/multi-server ./server
+  - docker build -t duc56/multi-worker ./worker
+
+
+
